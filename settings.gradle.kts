@@ -13,4 +13,4 @@ dependencyResolutionManagement {
     }
 }
 rootProject.name = "LeColorDot"
-include ':app'
+include(":app")
