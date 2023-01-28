@@ -1,3 +1,7 @@
+val majorVersion = 1
+val minorVersion = 0
+val patchVersion = 0
+
 plugins {
     id("com.android.application")
     id("org.jetbrains.kotlin.android")
@@ -10,8 +14,10 @@ android {
         applicationId = "com.vyvylilac.lecolordot"
         minSdk = 23
         targetSdk = 32
-        versionCode = 1
-        versionName = "1.0"
+        versionCode = majorVersion * 10000 + minorVersion * 100 + patchVersion
+        versionName = "$majorVersion.$minorVersion.$patchVersion"
+
+        multiDexEnabled = true
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
     }
