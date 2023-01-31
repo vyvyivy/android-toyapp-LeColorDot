@@ -1,3 +1,5 @@
+import org.jetbrains.kotlin.konan.properties.loadProperties
+
 val majorVersion = 1
 val minorVersion = 0
 val patchVersion = 0
@@ -22,12 +24,40 @@ android {
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
     }
 
+    flavorDimensions += "env"
+    productFlavors {
+        create("dev") {
+            dimension = "env"
+        }
+        create("prod") {
+            dimension = "env"
+        }
+    }
+
+    signingConfigs {
+        create("release") {
+            val properties = try {
+                loadProperties("keystore.properties")
+            } catch (_: java.nio.file.NoSuchFileException) {
+                return@create
+            }
+            keyAlias = properties["keyAlias"] as String
+            keyPassword = properties["keyPassword"] as String
+            storeFile = file(properties["storeFile"] as String)
+            storePassword = properties["storePassword"] as String
+        }
+    }
+
     buildTypes {
+        debug {
+
+        }
         release {
             isMinifyEnabled = false
             proguardFiles(getDefaultProguardFile("proguard-android-optimize.txt"), "proguard-rules.pro")
         }
     }
+
     compileOptions {
         sourceCompatibility = JavaVersion.VERSION_11
         targetCompatibility = JavaVersion.VERSION_11
@@ -38,13 +68,15 @@ android {
     buildFeatures {
         viewBinding = true
     }
+
+
 }
 
 dependencies {
 
     implementation("androidx.core:core-ktx:1.9.0")
     implementation("androidx.appcompat:appcompat:1.6.0")
-    implementation("com.google.android.material:material:1.7.0")
+    implementation("com.google.android.material:material:1.8.0")
     implementation("androidx.constraintlayout:constraintlayout:2.1.4")
     implementation("androidx.lifecycle:lifecycle-livedata-ktx:2.5.1")
     implementation("androidx.lifecycle:lifecycle-viewmodel-ktx:2.5.1")
